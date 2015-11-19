@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+   <head>
+	   <meta charset="utf-8">
+	   <title>YouCube</title>
+	   <link rel="stylesheet" type="text/css" href="style.css">
+	   <script type="text/javascript">
+           // конструктор объекта блог 
+           function Blog(text,date){
+           	this.text=text;
+           	this.date=date;
+           }
+           // глобальный массив записей Blog
+           var blog=[new Blog("Got the new cube I ordered. It is a real pearf.","08/14/2008"),
+               new Blog("Solved the new cube but of course, now I am bored and shopping for a new one.","08/19/2008"),
+               new Blog("Managed to get a headache toiling over the new cub. Gotta nap.","08/16/2008"),
+               new Blog("Found a 7x7x7 cube for sale online. Yikes! That one could be beast.","08/21/2008")];
+	       function showBlog(){
+	       	  var entries=blog.length;
+              var i=0;
+              while (i<entries){
+                 if(i%2==0)   
+                  document.getElementById("textBlog").innerHTML+="<p style='background-color:#EEEEEE'>"+"<strong>"+blog[i].date+"</strong>"+"<br>"+blog[i].text+"</p>";
+                 else
+                   document.getElementById("textBlog").innerHTML+="<p>"+"<strong>"+blog[i].date+"</strong>"+"<br>"+blog[i].text+"</p>";
+
+              i++;
+              }
+	       }
+	   </script>
+   </head>
+   <body>
+      <h1>YouCube - The Blog for Cube Puzzlers</h1> 
+      <img src="cube.png" alt="Cube">
+      <br>
+      <div id="textBlog"></div>
+      <br>
+      <input type="button" value="Show All Blog Entries" onclick="showBlog()">
+   </body> 
+</html>  
