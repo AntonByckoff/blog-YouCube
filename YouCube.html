@@ -11,27 +11,51 @@
            	this.date=date;
            }
            // глобальный массив записей Blog
-           var blog=[new Blog("Got the new cube I ordered. It is a real pearf.","08/14/2008"),
-               new Blog("Solved the new cube but of course, now I am bored and shopping for a new one.","08/19/2008"),
-               new Blog("Managed to get a headache toiling over the new cub. Gotta nap.","08/16/2008"),
-               new Blog("Found a 7x7x7 cube for sale online. Yikes! That one could be beast.","08/21/2008")];
-	       function showBlog(){
-	       	  var entries=blog.length;
+
+           var blog=[new Blog("Got the new cube I ordered. It is a real pearf.",new Date("08/14/2008")),
+               new Blog("Solved the new cube but of course, now I am bored and shopping for a new one.",new Date("08/19/2008")),
+               new Blog("Managed to get a headache toiling over the new cub. Gotta nap.",new Date("08/16/2008")),
+               new Blog("Found a 7x7x7 cube for sale online. Yikes! That one could be beast.",new Date("08/21/2008"))];
+	       function showBlog(numEntries){
+             // сортируем массив по убыванию 
+             blog.sort(function(blog1,blog2){return blog2.date-blog1.date});
+             // если не передано кол-во выводимых записей, выводим весь блог
+             if(!numEntries)
+	       	   numEntries=blog.length;
               var i=0;
-              while (i<entries){
+              var inputText="";
+              while (i<numEntries&&i<blog.length){
                  if(i%2==0)   
-                  document.getElementById("textBlog").innerHTML+="<p style='background-color:#EEEEEE'>"+"<strong>"+blog[i].date+"</strong>"+"<br>"+blog[i].text+"</p>";
+                  inputText+="<p style='background-color:#EEEEEE'>";
                  else
-                   document.getElementById("textBlog").innerHTML+="<p>"+"<strong>"+blog[i].date+"</strong>"+"<br>"+blog[i].text+"</p>";
+                  inputText+="<p>";
+
+                 inputText+="<strong>"+(blog[i].date.getMonth()+1)+"/"+blog[i].date.getDate()+"/"+blog[i].date.getFullYear()+"</strong>"+"<br>"+blog[i].text+"</p>";
 
               i++;
               }
+               document.getElementById("textBlog").innerHTML=inputText;
 	       }
+         function searchBlog(){
+           var searchText= document.getElementById("search_field").value;
+           for(var i=0; i<blog.length;i++){
+             // проверяем содержит ли запись поисковый текст
+             if(blog[i].text.toLowerCase().indexOf(searchText.toLowerCase())!=-1){
+              alert("["+(blog[i].date.getMonth()+1)+"/"+blog[i].date.getDate()+"/"+blog[i].date.getFullYear()+"]"+blog[i].text);
+              break;
+              }
+
+              if(i==(blog.length-1))
+              alert("Sorry,there ara no blog entries containing the search text.");
+          }
+         }
 	   </script>
    </head>
-   <body>
+   <body onload="showBlog(5);">
       <h1>YouCube - The Blog for Cube Puzzlers</h1> 
       <img src="cube.png" alt="Cube">
+      <input type="button" id="button_search" value="Search the Blog" onclick="searchBlog()">
+      <input type="text" id="search_field">
       <br>
       <div id="textBlog"></div>
       <br>
