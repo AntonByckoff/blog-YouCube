@@ -9,9 +9,29 @@
            function Blog(text,date){
            	this.text=text;
            	this.date=date;
-           }
-           // глобальный массив записей Blog
+            // метод возвращает запись блога ввиде текста
+            this.toString=function(){
+            return ("["+(this.date.getMonth()+1)+"/"+this.date.getDate()+"/"+this.date.getFullYear()+"]"+this.text);
+            }
+            // метод проверяет содержит ли блог искомый текст
+            this.containText=function(searchText){
+              return (this.text.toLowerCase().indexOf(searchText.toLowerCase())!=-1);
+           } 
+            // метод возвращает форматированное HTML-представление записи 
+            this.toHTML=function(i){
+              var inputText="";
+              if(i%2==0)   
+                  inputText+="<p style='background-color:#EEEEEE'>";
+                 else
+                  inputText+="<p>";
 
+                 inputText+="<strong>"+(this.date.getMonth()+1)+"/"+this.date.getDate()+"/"+this.date.getFullYear()+"</strong>"+"<br>"+this.text+"</p>";
+
+                 return inputText;  
+            }
+           }
+
+           // глобальный массив записей Blog
            var blog=[new Blog("Got the new cube I ordered. It is a real pearf.",new Date("08/14/2008")),
                new Blog("Solved the new cube but of course, now I am bored and shopping for a new one.",new Date("08/19/2008")),
                new Blog("Managed to get a headache toiling over the new cub. Gotta nap.",new Date("08/16/2008")),
@@ -25,12 +45,7 @@
               var i=0;
               var inputText="";
               while (i<numEntries&&i<blog.length){
-                 if(i%2==0)   
-                  inputText+="<p style='background-color:#EEEEEE'>";
-                 else
-                  inputText+="<p>";
-
-                 inputText+="<strong>"+(blog[i].date.getMonth()+1)+"/"+blog[i].date.getDate()+"/"+blog[i].date.getFullYear()+"</strong>"+"<br>"+blog[i].text+"</p>";
+                 inputText+=blog[i].toHTML(i);
 
               i++;
               }
@@ -40,14 +55,19 @@
            var searchText= document.getElementById("search_field").value;
            for(var i=0; i<blog.length;i++){
              // проверяем содержит ли запись поисковый текст
-             if(blog[i].text.toLowerCase().indexOf(searchText.toLowerCase())!=-1){
-              alert("["+(blog[i].date.getMonth()+1)+"/"+blog[i].date.getDate()+"/"+blog[i].date.getFullYear()+"]"+blog[i].text);
+             if(blog[i].containText(searchText)){
+              alert(blog[i]);
               break;
               }
 
               if(i==(blog.length-1))
               alert("Sorry,there ara no blog entries containing the search text.");
           }
+         }
+         function randomBlog(){
+           var randNom=Math.floor(Math.random()*blog.length);
+           alert(blog[randNom]);
+           alert(blog[i].toHTML(0));
          }
 	   </script>
    </head>
@@ -60,5 +80,6 @@
       <div id="textBlog"></div>
       <br>
       <input type="button" value="Show All Blog Entries" onclick="showBlog()">
+      <input type="button" value="View a Random Blog Entry" onclick="randomBlog()"> 
    </body> 
 </html>  
