@@ -9,28 +9,36 @@
            function Blog(text,date){
            	this.text=text;
            	this.date=date;
-            // метод возвращает запись блога ввиде текста
-            this.toString=function(){
-            return ("["+(this.date.getMonth()+1)+"/"+this.date.getDate()+"/"+this.date.getFullYear()+"]"+this.text);
+           }
+           // выносим метод toString в класс
+           // метод возвращает запись блога ввиде текста
+           Blog.prototype.toString=function(){
+            return ("["+this.date.shortFormat()+"]"+this.text+"\n"+this.signature);
             }
-            // метод проверяет содержит ли блог искомый текст
-            this.containText=function(searchText){
+           // выносим метод containText в класс
+           // метод проверяет содержит ли блог искомый текст
+           Blog.prototype.containText=function(searchText){
               return (this.text.toLowerCase().indexOf(searchText.toLowerCase())!=-1);
-           } 
-            // метод возвращает форматированное HTML-представление записи 
-            this.toHTML=function(i){
+            }  
+           // выносим метод toHTML в класс 
+          // метод возвращает форматированное HTML-представление записи  
+           Blog.prototype.toHTML=function(i){
               var inputText="";
               if(i%2==0)   
                   inputText+="<p style='background-color:#EEEEEE'>";
                  else
                   inputText+="<p>";
 
-                 inputText+="<strong>"+(this.date.getMonth()+1)+"/"+this.date.getDate()+"/"+this.date.getFullYear()+"</strong>"+"<br>"+this.text+"</p>";
+                 inputText+="<strong>"+this.date.shortFormat()+"</strong>"+"<br>"+this.text+"<br>"+this.signature+"</p>";
 
                  return inputText;  
             }
-           }
-
+            // добавление в класс подписи
+           Blog.prototype.signature="Puzzler Ruby"
+          
+           Date.prototype.shortFormat=function(){
+            return ((this.getMonth()+1)+"/"+this.getDate()+"/"+this.getFullYear());
+           } 
            // глобальный массив записей Blog
            var blog=[new Blog("Got the new cube I ordered. It is a real pearf.",new Date("08/14/2008")),
                new Blog("Solved the new cube but of course, now I am bored and shopping for a new one.",new Date("08/19/2008")),
