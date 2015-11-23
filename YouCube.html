@@ -6,9 +6,10 @@
 	   <link rel="stylesheet" type="text/css" href="style.css">
 	   <script type="text/javascript">
            // конструктор объекта блог 
-           function Blog(text,date){
+           function Blog(text,date,image){
            	this.text=text;
            	this.date=date;
+            this.image=image;
            }
            // выносим метод toString в класс
            // метод возвращает запись блога ввиде текста
@@ -24,29 +25,47 @@
           // метод возвращает форматированное HTML-представление записи  
            Blog.prototype.toHTML=function(i){
               var inputText="";
+              var styleHTML=""
               if(i%2==0)   
-                  inputText+="<p style='background-color:#EEEEEE'>";
-                 else
-                  inputText+="<p>";
-
-                 inputText+="<strong>"+this.date.shortFormat()+"</strong>"+"<br>"+this.text+"<br>"+this.signature+"</p>";
+                  styleHTML=" style='background-color:#EEEEEE'";
+              if(this.image)
+                inputText+="<div"+styleHTML+">"
+                              +"<table>"
+                                  +"<caption style='text-align:left'>"+"<strong>"+this.date.shortFormat()+"</strong>"+"</caption>"
+                                  +"<tr>"
+                                      +"<td>"+"<img src='"+this.image+"'>"+"</td>"
+                                      +"<td style='vertical-align:top'>"+this.text+"</td>"
+                                  +"</tr>"
+                                  +"<tr>"
+                                     +"<td rowspan='2'>"+this.signature+"</td>"
+                                  +"</tr>"
+                                 +"</table>"
+                           +"</div>";
+              else
+                inputText+="<p"+styleHTML+">"+ "<strong>"+this.date.shortFormat()+"</strong>"+"<br>"+this.text+"<br>"+this.signature+"</p>";
 
                  return inputText;  
             }
             // добавление в класс подписи
            Blog.prototype.signature="Puzzler Ruby"
-          
+           
            Date.prototype.shortFormat=function(){
             return ((this.getMonth()+1)+"/"+this.getDate()+"/"+this.getFullYear());
+
+            // функция сравнения для сортировки массива
+            Blog.blogSorter=function(blog1,blog2){
+              return (blog2.date-blog1.date);
+            }
+
            } 
            // глобальный массив записей Blog
-           var blog=[new Blog("Got the new cube I ordered. It is a real pearf.",new Date("08/14/2008")),
+           var blog=[new Blog("Got the new cube I ordered. It is a real pearf.",new Date("08/14/2008"),"cubeapart.png"),
                new Blog("Solved the new cube but of course, now I am bored and shopping for a new one.",new Date("08/19/2008")),
                new Blog("Managed to get a headache toiling over the new cub. Gotta nap.",new Date("08/16/2008")),
                new Blog("Found a 7x7x7 cube for sale online. Yikes! That one could be beast.",new Date("08/21/2008"))];
 	       function showBlog(numEntries){
              // сортируем массив по убыванию 
-             blog.sort(function(blog1,blog2){return blog2.date-blog1.date});
+             blog.sort(Blog.blogSorter);
              // если не передано кол-во выводимых записей, выводим весь блог
              if(!numEntries)
 	       	   numEntries=blog.length;
@@ -84,6 +103,7 @@
       <img src="cube.png" alt="Cube">
       <input type="button" id="button_search" value="Search the Blog" onclick="searchBlog()">
       <input type="text" id="search_field">
+      <br>
       <br>
       <div id="textBlog"></div>
       <br>
